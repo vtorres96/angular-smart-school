@@ -1,0 +1,70 @@
+<div class="row">
+
+  <!-- <div>
+    <input type="text" [(ngModel)]="textoSimples">
+    <p>{{textoSimples}}</p>
+  </div> -->
+
+  <div class="col-sm-4" *ngIf="professorSelecionado">
+    <div class="row ml-1">
+      <div class="mr-auto">
+        <app-titulo [titulo]="'Cód: ' + professorSelecionado.id"></app-titulo>
+      </div>
+    </div>
+  
+    <form [formGroup]="professorForm" (submit)="professorSubmit()">
+      <div class="form-group">
+        <label for="nome">Nome</label>
+        <input type="text" class="form-control" formControlName="nome" id="nome">
+      </div>
+      <div class="form-group">
+        <label for="sobrenome">Sobrenome</label>
+        <input type="text" class="form-control" formControlName="sobrenome" id="sobrenome">
+      </div>
+      <div class="form-group">
+        <label for="disciplina">disciplina</label>
+        <input type="text" class="form-control" formControlName="disciplina" id="disciplina">
+      </div>
+      <button class="btn btn-danger mr-2" (click)="voltar()">Voltar</button>
+      <button class="btn btn-primary" [disabled]="!professorForm.valid">Enviar</button>
+    </form>
+  </div>
+  <div [ngClass]="{'col-sm-8': professorSelecionado, 'col-sm-12': !professorSelecionado}" class="col-sm-6">
+    <div class="row ml-1">
+      <app-titulo [titulo]="titulo"></app-titulo>
+    </div>
+    <table class="table table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">Nome</th>
+          <th scope="col">Sobrenome</th>
+          <th scope="col">Disciplina</th>
+          <th scope="col" colspan="3">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let professor of professores">
+          <th scope="row">{{professor.nome}}</th>
+          <td>{{professor.sobrenome}}</td>
+          <td>{{professor.disciplina}}</td>
+          <td class="btn-group">
+            <button (click)="professorSelect(professor)" class="btn btn-primary mr-2">Detalhes</button>
+            <button (click)="openModal(template)" class="btn btn-warning mr-2">Alunos</button>
+            <button class="btn btn-danger">Desativar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-body">
+    <app-alunos></app-alunos>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" aria-label="Close" (click)="modalRef.hide()">
+      Fechar
+    </button>
+  </div>
+</ng-template>
