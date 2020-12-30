@@ -1,14 +1,12 @@
 <div class="row">
 
-  <!-- <div>
-    <input type="text" [(ngModel)]="textoSimples">
-    <p>{{textoSimples}}</p>
-  </div> -->
-
   <div class="col-sm-4" *ngIf="professorSelecionado">
     <div class="row ml-1">
       <div class="mr-auto">
-        <app-titulo [titulo]="'Cód: ' + professorSelecionado.id"></app-titulo>
+        <app-titulo 
+          [titulo]="(professorSelecionado.id === 0 ? 
+          'Novo Professor' : 'Cód: ' + professorSelecionado.id)">
+        </app-titulo>
       </div>
     </div>
   
@@ -21,50 +19,56 @@
         <label for="sobrenome">Sobrenome</label>
         <input type="text" class="form-control" formControlName="sobrenome" id="sobrenome">
       </div>
-      <div class="form-group">
-        <label for="disciplina">disciplina</label>
-        <input type="text" class="form-control" formControlName="disciplina" id="disciplina">
-      </div>
       <button class="btn btn-danger mr-2" (click)="voltar()">Voltar</button>
       <button class="btn btn-primary" [disabled]="!professorForm.valid">Enviar</button>
     </form>
   </div>
   <div [ngClass]="{'col-sm-8': professorSelecionado, 'col-sm-12': !professorSelecionado}" class="col-sm-6">
     <div class="row ml-1">
-      <app-titulo [titulo]="titulo"></app-titulo>
+      <div class="my-2 d-flex col-12 justify-content-between px-0">
+        <app-titulo [titulo]="titulo"></app-titulo>
+        <button [ngClass]="{'d-none': professorSelecionado, 'd-block': !professorSelecionado}" class="btn btn-primary" (click)="professorNovo()">Novo Professor</button>
+      </div>
+
+      <div class="my-2 col-12 px-0 alert alert-success text-center" *ngIf="mensagem != null">
+        {{mensagem.message}}
+      </div>
+
+      <table class="table table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Nome</th>
+            <th scope="col">Sobrenome</th>
+            <th scope="col" colspan="3">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let professor of professores">
+            <th scope="row">{{professor.nome}}</th>
+            <td>{{professor.sobrenome}}</td>
+            <td class="btn-group">
+              <button (click)="professorSelect(professor)" class="btn btn-primary mr-2">Detalhes</button>
+              <button (click)="openModal(template)" class="btn btn-danger">Excluir</button>
+              <ng-template #template>
+                <div class="modal-header">
+                  Exclusão de professor
+                </div>
+                <div class="modal-body">
+                  Deseja realmente excluir professor {{professor.nome}} ?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" aria-label="Close" (click)="modalRef.hide()">
+                    Cancelar
+                  </button>
+                  <button type="button" class="btn btn-danger" aria-label="Close" (click)="deletar(professor.id)">
+                    Excluir
+                  </button>
+                </div>
+              </ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <table class="table table-hover">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">Nome</th>
-          <th scope="col">Sobrenome</th>
-          <th scope="col">Disciplina</th>
-          <th scope="col" colspan="3">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let professor of professores">
-          <th scope="row">{{professor.nome}}</th>
-          <td>{{professor.sobrenome}}</td>
-          <td>{{professor.disciplina}}</td>
-          <td class="btn-group">
-            <button (click)="professorSelect(professor)" class="btn btn-primary mr-2">Detalhes</button>
-            <button (click)="openModal(template)" class="btn btn-warning mr-2">Alunos</button>
-            <button class="btn btn-danger">Desativar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </div>
-
-<ng-template #template>
-  <div class="modal-body">
-    <app-alunos></app-alunos>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-danger" aria-label="Close" (click)="modalRef.hide()">
-      Fechar
-    </button>
-  </div>
-</ng-template>
