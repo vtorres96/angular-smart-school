@@ -116,7 +116,7 @@ namespace api.Controllers
 
                 if(await _repo.SaveChangesAsync())
                 {
-                    return Ok("Deletado");
+                    return Ok(new { message = "Professor excluído com sucesso" });
                 }                
             }
             catch (Exception ex)
