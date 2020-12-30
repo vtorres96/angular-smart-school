@@ -1,14 +1,12 @@
 <div class="row">
 
-  <!-- <div>
-    <input type="text" [(ngModel)]="textoSimples">
-    <p>{{textoSimples}}</p>
-  </div> -->
-
   <div class="col-sm-4" *ngIf="alunoSelecionado">
     <div class="row ml-1">
       <div class="mr-auto">
-        <app-titulo [titulo]="'Cód: ' + alunoSelecionado.id"></app-titulo>
+        <app-titulo 
+          [titulo]="(alunoSelecionado.id === 0 ? 
+          'Novo Aluno' : 'Cód: ' + alunoSelecionado.id)">
+        </app-titulo>
       </div>
     </div>
   
@@ -31,40 +29,52 @@
   </div>
   <div [ngClass]="{'col-sm-8': alunoSelecionado, 'col-sm-12': !alunoSelecionado}" class="col-sm-6">
     <div class="row ml-1">
-      <app-titulo [titulo]="titulo"></app-titulo>
+      <div class="my-2 d-flex col-12 justify-content-between px-0">
+        <app-titulo [titulo]="titulo"></app-titulo>
+        <button [ngClass]="{'d-none': alunoSelecionado, 'd-block': !alunoSelecionado}" class="btn btn-primary" (click)="alunoNovo()">Novo Aluno</button>
+      </div>
+
+      <div class="my-2 col-12 px-0 alert alert-success text-center" *ngIf="mensagem != null">
+        {{mensagem.message}}
+      </div>
+  
+      <table class="table table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Nome</th>
+            <th scope="col">Sobrenome</th>
+            <th scope="col">Telefone</th>
+            <th scope="col" colspan="3">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let aluno of alunos">
+            <th scope="row">{{aluno.nome}}</th>
+            <td>{{aluno.sobrenome}}</td>
+            <td>{{aluno.telefone}}</td>
+            <td class="btn-group">
+              <button (click)="alunoSelect(aluno)" class="btn btn-primary mr-2">Detalhes</button>
+              <button (click)="openModal(template)" class="btn btn-danger">Excluir</button>
+              <ng-template #template>
+                <div class="modal-header">
+                  Exclusão de aluno
+                </div>
+                <div class="modal-body">
+                  Deseja realmente excluir aluno {{aluno.nome}} ?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light" aria-label="Close" (click)="modalRef.hide()">
+                    Cancelar
+                  </button>
+                  <button type="button" class="btn btn-danger" aria-label="Close" (click)="deletar(aluno.id)">
+                    Excluir
+                  </button>
+                </div>
+              </ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <table class="table table-hover">
-      <thead class="thead-dark">
-        <tr>
-          <th scope="col">Nome</th>
-          <th scope="col">Sobrenome</th>
-          <th scope="col">Telefone</th>
-          <th scope="col" colspan="3">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let aluno of alunos">
-          <th scope="row">{{aluno.nome}}</th>
-          <td>{{aluno.sobrenome}}</td>
-          <td>{{aluno.telefone}}</td>
-          <td class="btn-group">
-            <button (click)="alunoSelect(aluno)" class="btn btn-primary mr-2">Detalhes</button>
-            <button (click)="openModal(template)" class="btn btn-warning mr-2">Professores</button>
-            <button class="btn btn-danger">Desativar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </div>
-
-<ng-template #template>
-  <div class="modal-body">
-    <app-professores></app-professores>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-danger" aria-label="Close" (click)="modalRef.hide()">
-      Fechar
-    </button>
-  </div>
-</ng-template>
