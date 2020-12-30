@@ -116,7 +116,7 @@ namespace api.Controllers
 
                 if(await _repo.SaveChangesAsync())
                 {
-                    return Ok("Aluno excluído com sucesso");
+                    return Ok(new { message = "Aluno excluído com sucesso" });
                 }                
             }
             catch (Exception ex)
