@@ -1,4 +1,4 @@
-# Omni-Stack-11
+# Angular Smart School
 
 project developed with .Net Core and EF Core in backend and AngularJS in frontend.
 
